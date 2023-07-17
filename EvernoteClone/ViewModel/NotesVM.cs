@@ -8,8 +8,8 @@ namespace EvernoteClone.ViewModel
 {
     public class NotesVM
     {
-        ObservableCollection<Notebook> Notebooks { get; set; }
-        ObservableCollection<Note> Notes { get; set; }
+        public ObservableCollection<Notebook> Notebooks { get; set; }
+        public ObservableCollection<Note> Notes { get; set; }
 
         private Notebook _selectedNotebook;
         public Notebook SelectedNotebook
