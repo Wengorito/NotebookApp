@@ -6,6 +6,9 @@
 # Application Secrets
 AppSettings.config
 
+# SQLite files
+*.db3
+
 # User-specific files
 *.rsuser
 *.suo

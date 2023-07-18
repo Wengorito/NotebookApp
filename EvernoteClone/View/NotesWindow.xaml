@@ -27,15 +27,16 @@
         </Menu>
         <ListView DockPanel.Dock="Left"
                   Width="140"
+                  SelectedValue="{Binding SelectedNotebook, Mode=TwoWay}"
                   ItemsSource="{Binding Notebooks}">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Name}"/>
+                    <TextBlock Text="{Binding Id}"/>
                 </DataTemplate>
             </ListView.ItemTemplate>            
         </ListView>
         <ListView DockPanel.Dock="Left"
-                  Width="140"
+                  Width="180"
                   ItemsSource="{Binding Notes}">
             <ListView.ItemTemplate>
                 <DataTemplate>

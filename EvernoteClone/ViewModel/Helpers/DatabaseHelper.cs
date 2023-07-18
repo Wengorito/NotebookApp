@@ -63,5 +63,27 @@ namespace EvernoteClone.ViewModel.Helpers
                 return false;
             }
         }
+
+        public static bool DeleteAll<T>()
+        {
+            using (SQLiteConnection connection = new SQLiteConnection(dbFile))
+            {
+                connection.CreateTable<T>();
+                var rows = connection.DeleteAll<T>();
+
+                if (rows > 0)
+                    return true;
+
+                return false;
+            }
+        }
+
+        public static void DropTable<T>()
+        {
+            using (SQLiteConnection connection = new SQLiteConnection(dbFile))
+            {
+                connection.DropTable<T>();
+            }
+        }
     }
 }
