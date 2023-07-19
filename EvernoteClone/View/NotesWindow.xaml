@@ -51,9 +51,9 @@
         </ListView>
         <ToolBarTray DockPanel.Dock="Top">
             <ToolBar>
-                <Button Name="speechButton"
-                        Content="Speech"
-                        Click="speechButton_Click"/>
+                <Button Name="azureSpeechButton"
+                        Content="AzureSpeech"
+                        Click="azureSpeechButton_Click"/>
                 <Button x:Name="boldButton"
                         Click="boldButton_Click">
                     <TextBlock Text="B"
