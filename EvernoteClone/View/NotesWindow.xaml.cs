@@ -42,9 +42,11 @@ namespace EvernoteClone.View
             {
                 if (!string.IsNullOrEmpty(_viewModel.SelectedNote.FileLocation))
                 {
-                    FileStream fileStream = new FileStream(_viewModel.SelectedNote.FileLocation, FileMode.Open);
-                    var contents = new TextRange(contentRichTextBox.Document.ContentStart, contentRichTextBox.Document.ContentEnd);
-                    contents.Load(fileStream, DataFormats.Rtf);
+                    using (var fileStream = new FileStream(_viewModel.SelectedNote.FileLocation, FileMode.Open))
+                    {
+                        var contents = new TextRange(contentRichTextBox.Document.ContentStart, contentRichTextBox.Document.ContentEnd);
+                        contents.Load(fileStream, DataFormats.Rtf);
+                    }
                 }
             }
         }
@@ -146,9 +148,11 @@ namespace EvernoteClone.View
             _viewModel.SelectedNote.FileLocation = rtfFile;
             DatabaseHelper.Update(_viewModel.SelectedNote);
 
-            FileStream fileStream = new FileStream(rtfFile, FileMode.Create);
-            var contents = new TextRange(contentRichTextBox.Document.ContentStart, contentRichTextBox.Document.ContentEnd);
-            contents.Save(fileStream, DataFormats.Rtf);
+            using (var fileStream = new FileStream(rtfFile, FileMode.Create))
+            {
+                var contents = new TextRange(contentRichTextBox.Document.ContentStart, contentRichTextBox.Document.ContentEnd);
+                contents.Save(fileStream, DataFormats.Rtf);
+            }
         }
     }
 }
