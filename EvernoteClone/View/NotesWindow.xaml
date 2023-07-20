@@ -3,9 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:EvernoteClone.View"
         xmlns:vm="clr-namespace:EvernoteClone.ViewModel"
-        xmlns:uc="clr-namespace:EvernoteClone.View.UserControls"
+        xmlns:uc="clr-namespace:EvernoteClone.View.UserControls" 
         mc:Ignorable="d"
         Title="NotesWindow" Height="450" Width="800">
     
@@ -49,6 +50,12 @@
                         </uc:NotebookUC>
                         <TextBox Text="{Binding Name, Mode=TwoWay}"
                                  Visibility="{Binding Source={StaticResource vm}, Path=IsVisible}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="LostFocus">
+                                    <i:InvokeCommandAction Command="{Binding Source={StaticResource vm}, Path=EndEditingCommand}"
+                                                           CommandParameter="{Binding}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
                         </TextBox>
                     </Grid>
                 </DataTemplate>
