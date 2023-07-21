@@ -20,13 +20,13 @@ namespace EvernoteClone.ViewModel.Commands
         }
         public bool CanExecute(object parameter)
         {
-            Notebook selectedNotebook = parameter as Notebook;
+            var selectedNotebook = parameter as Notebook;
             return selectedNotebook != null ? true : false;
         }
 
         public void Execute(object parameter)
         {
-            Notebook selectedNotebook = parameter as Notebook;
+            var selectedNotebook = parameter as Notebook;
             VM.CreateNote(selectedNotebook.Id);
         }
     }

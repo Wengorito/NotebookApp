@@ -19,7 +19,7 @@ namespace EvernoteClone.View
     /// </summary>
     public partial class NotesWindow : Window
     {
-        NotesVM _viewModel;
+        private NotesVM _viewModel;
 
         public NotesWindow()
         {
@@ -34,6 +34,21 @@ namespace EvernoteClone.View
             var fontSizes = new List<double>() { 8, 9, 10, 11, 12, 14, 16, 28, 48, 72 };
             fontSizeComboBox.ItemsSource = fontSizes;
         }
+
+        protected override void OnActivated(EventArgs e)
+        {
+            base.OnActivated(e);
+
+            if (string.IsNullOrEmpty(App.UserId))
+            {
+                var loginWindow = new LoginWindow();
+                loginWindow.Owner = this;
+                loginWindow.ShowDialog();
+
+                _viewModel.GetNotebooks();
+            }
+        }
+
         private void ViewModel_SelectedNoteChanged(object sender, EventArgs e)
         {
             contentRichTextBox.Document.Blocks.Clear();
