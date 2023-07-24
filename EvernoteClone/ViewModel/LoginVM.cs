@@ -1,6 +1,7 @@
 ﻿using EvernoteClone.Model;
 using EvernoteClone.ViewModel.Commands;
 using EvernoteClone.ViewModel.Helpers;
+using System;
 using System.ComponentModel;
 using System.Windows;
 
@@ -143,6 +144,7 @@ namespace EvernoteClone.ViewModel
         public ShowRegisterCommand ShowRegisterCommand { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
+        public event EventHandler Authenticated;
 
         public LoginVM()
         {
@@ -177,10 +179,24 @@ namespace EvernoteClone.ViewModel
             _isShowingRegister = !_isShowingRegister;
         }
 
-        public async void RegisterUser()
+        public async void Register()
         {
-            await FirebaseAuthHelper.Register(User);
+            bool result = await FirebaseAuthHelper.Register(User);
+
+            if (result)
+            {
+                Authenticated?.Invoke(this, new EventArgs());
+            }
         }
 
+        public async void Login()
+        {
+            bool result = await FirebaseAuthHelper.Login(User);
+
+            if (result)
+            {
+                Authenticated?.Invoke(this, new EventArgs());
+            }
+        }
     }
 }

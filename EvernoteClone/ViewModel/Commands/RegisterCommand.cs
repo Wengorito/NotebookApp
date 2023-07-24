@@ -36,7 +36,7 @@ namespace EvernoteClone.ViewModel.Commands
 
         public void Execute(object parameter)
         {
-            VM.RegisterUser();
+            VM.Register();
         }
     }
 }

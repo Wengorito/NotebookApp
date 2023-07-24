@@ -15,7 +15,6 @@ namespace EvernoteClone.ViewModel
         public ObservableCollection<Note> Notes { get; set; }
 
         private Notebook _selectedNotebook;
-
         public Notebook SelectedNotebook
         {
             get { return _selectedNotebook; }
@@ -28,7 +27,6 @@ namespace EvernoteClone.ViewModel
         }
 
         private Note _selectedNote;
-
         public Note SelectedNote
         {
             get { return _selectedNote; }
@@ -40,9 +38,7 @@ namespace EvernoteClone.ViewModel
             }
         }
 
-
         private Visibility _isVisible;
-
         public Visibility IsVisible
 
         {
@@ -101,7 +97,8 @@ namespace EvernoteClone.ViewModel
         {
             var newNotebook = new Notebook
             {
-                Name = "New notebook"
+                Name = "New notebook",
+                UserId = App.UserId
             };
 
             DatabaseHelper.Insert(newNotebook);
@@ -111,7 +108,7 @@ namespace EvernoteClone.ViewModel
 
         public void GetNotebooks()
         {
-            var notebooks = DatabaseHelper.Read<Notebook>();
+            var notebooks = DatabaseHelper.Read<Notebook>().Where(n => n.UserId == App.UserId).ToList();
 
             Notebooks.Clear();
             foreach (var notebook in notebooks)

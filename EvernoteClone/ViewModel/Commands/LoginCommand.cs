@@ -13,9 +13,9 @@ namespace EvernoteClone.ViewModel.Commands
             remove { CommandManager.RequerySuggested -= value; }
         }
 
-        public LoginCommand(LoginVM vm)
+        public LoginCommand(LoginVM vM)
         {
-            VM = vm;
+            VM = vM;
         }
 
         public bool CanExecute(object parameter)
@@ -34,7 +34,7 @@ namespace EvernoteClone.ViewModel.Commands
 
         public void Execute(object parameter)
         {
-            //TODO 
+            VM.Login();
         }
     }
 }
