@@ -1,5 +1,6 @@
 ﻿using EvernoteClone.Model;
 using EvernoteClone.ViewModel.Commands;
+using EvernoteClone.ViewModel.Helpers;
 using System.ComponentModel;
 using System.Windows;
 
@@ -175,5 +176,11 @@ namespace EvernoteClone.ViewModel
 
             _isShowingRegister = !_isShowingRegister;
         }
+
+        public async void RegisterUser()
+        {
+            await FirebaseAuthHelper.Register(User);
+        }
+
     }
 }
