@@ -1,4 +1,4 @@
-# NoteApp
+# NotebookApp
 Personal notebook application - provides simplified functionality that of OneNote or Evernote
 
 ## Functionalities
