@@ -8,7 +8,7 @@
         xmlns:vm="clr-namespace:EvernoteClone.ViewModel"
         xmlns:uc="clr-namespace:EvernoteClone.View.UserControls" 
         mc:Ignorable="d"
-        Title="NotesWindow" Height="450" Width="800">
+        Title="NoteApp" Height="450" Width="800">
     
     <Window.Resources>
         <vm:NotesVM x:Key="vm"/>
@@ -34,7 +34,7 @@
         </StatusBar>
         <ListView DockPanel.Dock="Left"
                   Background="MidnightBlue"
-                  Width="140"
+                  Width="160"
                   SelectedValue="{Binding SelectedNotebook, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   ItemsSource="{Binding Notebooks}">
             <ListView.ItemTemplate>
@@ -44,12 +44,16 @@
                             <uc:NotebookUC.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Header="Rename"
-                                          Command="{Binding Source={StaticResource vm}, Path=EditCommand}"/>
+                                          Command="{Binding Source={StaticResource vm}, Path=EditCommand}"
+                                          CommandParameter="{Binding}"/>
+                                    <MenuItem Header="Delete"
+                                          Command="{Binding Source={StaticResource vm}, Path=DeleteCommand}"
+                                          CommandParameter="{Binding}"/>
                                 </ContextMenu>
                             </uc:NotebookUC.ContextMenu>
                         </uc:NotebookUC>
                         <TextBox Text="{Binding Name, Mode=TwoWay}"
-                                 Visibility="{Binding Source={StaticResource vm}, Path=IsVisible}">
+                                 Visibility="{Binding Source={StaticResource vm}, Path=IsVisibleEditNotebook}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="LostFocus">
                                     <i:InvokeCommandAction Command="{Binding Source={StaticResource vm}, Path=EndEditingCommand}"
@@ -67,7 +71,29 @@
                   ItemsSource="{Binding Notes}">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <uc:NoteUC Note="{Binding}"/>
+                    <Grid>
+                        <uc:NoteUC Note="{Binding}">
+                            <uc:NoteUC.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Rename"
+                                          Command="{Binding Source={StaticResource vm}, Path=EditCommand}"
+                                          CommandParameter="{Binding}"/>
+                                    <MenuItem Header="Delete"
+                                        Command="{Binding Source={StaticResource vm}, Path=DeleteCommand}"
+                                        CommandParameter="{Binding}"/>
+                                </ContextMenu>
+                            </uc:NoteUC.ContextMenu>
+                        </uc:NoteUC>
+                        <TextBox Text="{Binding Title, Mode=TwoWay}"
+                                 Visibility="{Binding Source={StaticResource vm}, Path=IsVisibleEditNote}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="LostFocus">
+                                    <i:InvokeCommandAction Command="{Binding Source={StaticResource vm}, Path=EndEditingCommand}"
+                                                           CommandParameter="{Binding}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </TextBox>
+                    </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

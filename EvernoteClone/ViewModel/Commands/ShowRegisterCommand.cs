@@ -14,7 +14,6 @@ namespace EvernoteClone.ViewModel.Commands
             _loginVM = loginVM;
         }
 
-
         public bool CanExecute(object parameter)
         {
             return true;

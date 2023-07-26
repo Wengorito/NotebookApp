@@ -19,7 +19,6 @@ namespace EvernoteClone.View
 
             _viewModel = Resources["vm"] as LoginVM;
             _viewModel.Authenticated += ViewModel_Authenticated;
-
         }
 
         private void ViewModel_Authenticated(object sender, EventArgs e)
@@ -27,6 +26,7 @@ namespace EvernoteClone.View
             Close();
         }
 
+        //https://stackoverflow.com/questions/13361260/how-to-distinguish-window-close-button-clicked-x-vs-window-close-in-closi
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
             bool wasCodeClosed = new StackTrace().GetFrames().FirstOrDefault(x => x.GetMethod() == typeof(Window).GetMethod("Close")) != null;

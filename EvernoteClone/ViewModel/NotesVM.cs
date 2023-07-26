@@ -38,15 +38,25 @@ namespace EvernoteClone.ViewModel
             }
         }
 
-        private Visibility _isVisible;
-        public Visibility IsVisible
-
+        private Visibility _isVisibleEditNotebook;
+        public Visibility IsVisibleEditNotebook
         {
-            get { return _isVisible; }
+            get { return _isVisibleEditNotebook; }
             set
             {
-                _isVisible = value;
-                OnPropertyChanged(nameof(IsVisible));
+                _isVisibleEditNotebook = value;
+                OnPropertyChanged(nameof(IsVisibleEditNotebook));
+            }
+        }
+
+        private Visibility _isVisibleEditNote;
+        public Visibility IsVisibleEditNote
+        {
+            get { return _isVisibleEditNote; }
+            set
+            {
+                _isVisibleEditNote = value;
+                OnPropertyChanged(nameof(IsVisibleEditNote));
             }
         }
 
@@ -54,6 +64,7 @@ namespace EvernoteClone.ViewModel
         public NewNoteCommand NewNoteCommand { get; set; }
         public EditCommand EditCommand { get; set; }
         public EndEditingCommand EndEditingCommand { get; set; }
+        public DeleteCommand DeleteCommand { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler SelectedNoteChanged;
@@ -64,11 +75,13 @@ namespace EvernoteClone.ViewModel
             NewNoteCommand = new NewNoteCommand(this);
             EditCommand = new EditCommand(this);
             EndEditingCommand = new EndEditingCommand(this);
+            DeleteCommand = new DeleteCommand(this);
 
             Notebooks = new ObservableCollection<Notebook>();
             Notes = new ObservableCollection<Note>();
 
-            IsVisible = Visibility.Collapsed;
+            IsVisibleEditNotebook = Visibility.Collapsed;
+            IsVisibleEditNote = Visibility.Collapsed;
 
             GetNotebooks();
         }
@@ -78,7 +91,7 @@ namespace EvernoteClone.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public void CreateNote(int notebookId)
+        public async void CreateNote(string notebookId)
         {
             var newNote = new Note
             {
@@ -88,12 +101,13 @@ namespace EvernoteClone.ViewModel
                 Title = $"New Note"
             };
 
-            DatabaseHelper.Insert(newNote);
+            //DatabaseHelper.Insert(newNote);
+            await FirebaseDatabaseHelper.Insert(newNote);
 
             GetNotes();
         }
 
-        public void CreateNotebook()
+        public async void CreateNotebook()
         {
             var newNotebook = new Notebook
             {
@@ -101,14 +115,15 @@ namespace EvernoteClone.ViewModel
                 UserId = App.UserId
             };
 
-            DatabaseHelper.Insert(newNotebook);
+            //DatabaseHelper.Insert(newNotebook);
+            await FirebaseDatabaseHelper.Insert(newNotebook);
 
             GetNotebooks();
         }
 
-        public void GetNotebooks()
+        public async void GetNotebooks()
         {
-            var notebooks = DatabaseHelper.Read<Notebook>().Where(n => n.UserId == App.UserId).ToList();
+            var notebooks = (await FirebaseDatabaseHelper.Read<Notebook>()).Where(n => n.UserId == App.UserId).ToList();
 
             Notebooks.Clear();
             foreach (var notebook in notebooks)
@@ -117,11 +132,11 @@ namespace EvernoteClone.ViewModel
             }
         }
 
-        private void GetNotes()
+        private async void GetNotes()
         {
             if (SelectedNotebook != null)
             {
-                var notes = DatabaseHelper.Read<Note>().Where(n => n.NotebookId == SelectedNotebook.Id).ToList();
+                var notes = (await FirebaseDatabaseHelper.Read<Note>()).Where(n => n.NotebookId == SelectedNotebook.Id).ToList();
 
                 Notes.Clear();
                 foreach (var note in notes)
@@ -131,16 +146,51 @@ namespace EvernoteClone.ViewModel
             }
         }
 
-        public void StartEditing()
+        public void StartEditingNotebook()
         {
-            IsVisible = Visibility.Visible;
+            IsVisibleEditNotebook = Visibility.Visible;
         }
 
-        public void StopEditing(Notebook notebook)
+        public void StartEditingNote()
         {
-            IsVisible = Visibility.Collapsed;
-            DatabaseHelper.Update(notebook);
+            IsVisibleEditNote = Visibility.Visible;
+        }
+
+        public async void StopEditingNotebook(Notebook notebook)
+        {
+            IsVisibleEditNotebook = Visibility.Collapsed;
+            //DatabaseHelper.Update(notebook);
+            await FirebaseDatabaseHelper.Update(notebook);
             GetNotebooks();
+        }
+
+        public async void StopEditingNote(Note note)
+        {
+            IsVisibleEditNote = Visibility.Collapsed;
+            //DatabaseHelper.Update(note);
+            await FirebaseDatabaseHelper.Update(note);
+            GetNotebooks();
+        }
+
+        public async void DeleteNotebook(Notebook notebook)
+        {
+            var notes = (await FirebaseDatabaseHelper.Read<Note>()).Where(n => n.NotebookId == notebook.Id).ToList();
+            foreach (var note in notes)
+            {
+                await FirebaseDatabaseHelper.Delete(note);
+            }
+
+            await FirebaseDatabaseHelper.Delete(notebook);
+            Notes.Clear();
+            GetNotebooks();
+        }
+
+        public async void DeleteNote(Note note)
+        {
+            //TODO erase file locally
+
+            await FirebaseDatabaseHelper.Delete(note);
+            GetNotes();
         }
     }
 }

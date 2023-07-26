@@ -6,6 +6,9 @@
 # Application Secrets
 AppSettings.config
 
+# Pictures
+*.png
+
 # SQLite files
 *.db3
 

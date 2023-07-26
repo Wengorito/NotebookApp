@@ -71,7 +71,7 @@ namespace EvernoteClone.View
             Application.Current.Shutdown();
         }
 
-        private void contentRichTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        private void contentRichTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             int ammountCharacters = (new TextRange(contentRichTextBox.Document.ContentStart, contentRichTextBox.Document.ContentEnd)).Text.Length;
 
@@ -157,11 +157,12 @@ namespace EvernoteClone.View
             contentRichTextBox.Selection.ApplyPropertyValue(Inline.FontSizeProperty, fontSizeComboBox.Text);
         }
 
-        private void saveButton_Click(object sender, RoutedEventArgs e)
+        private async void saveButton_Click(object sender, RoutedEventArgs e)
         {
             string rtfFile = Path.Combine(Environment.CurrentDirectory, $"{_viewModel.SelectedNote.Id}.rtf");
             _viewModel.SelectedNote.FileLocation = rtfFile;
-            DatabaseHelper.Update(_viewModel.SelectedNote);
+            //DatabaseHelper.Update(_viewModel.SelectedNote);
+            await FirebaseDatabaseHelper.Update(_viewModel.SelectedNote);
 
             using (var fileStream = new FileStream(rtfFile, FileMode.Create))
             {

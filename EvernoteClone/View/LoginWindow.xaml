@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:EvernoteClone.View"
         xmlns:vm="clr-namespace:EvernoteClone.ViewModel"
         mc:Ignorable="d"
-        Title="LoginWindow" Height="300" Width="300">
+        Title="User Authentication" Height="300" Width="300">
     <Window.Resources>
         <vm:LoginVM x:Key="vm"/>
     </Window.Resources>

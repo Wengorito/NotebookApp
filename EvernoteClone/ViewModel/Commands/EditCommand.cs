@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EvernoteClone.Model;
+using System;
 using System.Windows.Input;
 
 namespace EvernoteClone.ViewModel.Commands
@@ -21,7 +22,17 @@ namespace EvernoteClone.ViewModel.Commands
 
         public void Execute(object parameter)
         {
-            VM.StartEditing();
+            if (parameter != null)
+            {
+                if (parameter is Notebook)
+                {
+                    VM.StartEditingNotebook();
+                }
+                else if (parameter is Note)
+                {
+                    VM.StartEditingNote();
+                }
+            }
         }
     }
 }

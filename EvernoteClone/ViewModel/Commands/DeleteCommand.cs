@@ -4,14 +4,15 @@ using System.Windows.Input;
 
 namespace EvernoteClone.ViewModel.Commands
 {
-    public class EndEditingCommand : ICommand
+    public class DeleteCommand : ICommand
     {
-        public event EventHandler CanExecuteChanged;
-        public NotesVM VM { get; set; }
+        private readonly NotesVM _vM;
 
-        public EndEditingCommand(NotesVM vM)
+        public event EventHandler CanExecuteChanged;
+
+        public DeleteCommand(NotesVM vM)
         {
-            VM = vM;
+            _vM = vM;
         }
 
         public bool CanExecute(object parameter)
@@ -25,12 +26,11 @@ namespace EvernoteClone.ViewModel.Commands
             {
                 if (parameter is Notebook)
                 {
-                    VM.StopEditingNotebook(parameter as Notebook);
-
+                    _vM.DeleteNotebook(parameter as Notebook);
                 }
                 else if (parameter is Note)
                 {
-                    VM.StopEditingNote(parameter as Note);
+                    _vM.DeleteNote(parameter as Note);
                 }
             }
         }

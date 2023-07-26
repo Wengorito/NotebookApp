@@ -1,13 +1,11 @@
-﻿using SQLite;
-
-namespace EvernoteClone.Model
+﻿namespace EvernoteClone.Model
 {
-    public class Notebook
+    public class Notebook : HasId
     {
-        [PrimaryKey, AutoIncrement]
-        public int Id { get; set; }
+        //[PrimaryKey, AutoIncrement]
+        public string Id { get; set; }
 
-        [Indexed]
+        //[Indexed]
         public string UserId { get; set; }
         public string Name { get; set; }
     }

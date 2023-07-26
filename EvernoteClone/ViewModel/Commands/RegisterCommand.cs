@@ -7,6 +7,7 @@ namespace EvernoteClone.ViewModel.Commands
     public class RegisterCommand : ICommand
     {
         public LoginVM VM { get; set; }
+
         public event EventHandler CanExecuteChanged
         {
             add { CommandManager.RequerySuggested += value; }
