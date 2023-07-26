@@ -9,7 +9,7 @@ Personal notebook application - provides simplified functionality that of OneNot
 Application uses Google Firebase Authentication and Realtime for user registration/login and database. Notes content is stored locally.
 
 Main window view: 
-![alt text](/AppScreenshot.png?raw=true)
+![alt text](Screenshots/MainWindowResized.png?raw=true)
 
 User authentication window:
-![alt text](UserAuthentication.png?raw=true)
+![alt text](Screenshots/UserAuthenticationResized.png?raw=true)
