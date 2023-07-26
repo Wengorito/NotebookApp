@@ -11,4 +11,6 @@ Application uses Google Firebase Authentication and Realtime for user registrati
 
 ### Application screenshots
 ![alt text](Screenshots/MainWindowResized.png?raw=true)
+Main window view
 ![alt text](Screenshots/UserAuthenticationResized.png?raw=true)
+User registration/login view
