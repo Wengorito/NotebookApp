@@ -9,8 +9,6 @@ namespace EvernoteClone.ViewModel.Helpers
 {
     public class FirebaseDatabaseHelper
     {
-        private const string DB_PATH = "https://notesappwpf-edf82-default-rtdb.europe-west1.firebasedatabase.app/";
-
         public static async Task<bool> Insert<T>(T item)
         {
             var jsonBody = JsonConvert.SerializeObject(item);
@@ -18,7 +16,7 @@ namespace EvernoteClone.ViewModel.Helpers
 
             using (var client = new HttpClient())
             {
-                var result = await client.PostAsync($"{DB_PATH}{item.GetType().Name.ToLower()}.json", content);
+                var result = await client.PostAsync($"{AppSecretsHelper.Read("FirebaseRealtimePath")}{item.GetType().Name.ToLower()}.json", content);
 
                 if (result.IsSuccessStatusCode)
                 {
@@ -32,7 +30,7 @@ namespace EvernoteClone.ViewModel.Helpers
         {
             using (var client = new HttpClient())
             {
-                var result = await client.GetAsync($"{DB_PATH}{typeof(T).Name.ToLower()}.json");
+                var result = await client.GetAsync($"{AppSecretsHelper.Read("FirebaseRealtimePath")}{typeof(T).Name.ToLower()}.json");
 
                 if (result.IsSuccessStatusCode)
                 {
@@ -62,7 +60,7 @@ namespace EvernoteClone.ViewModel.Helpers
 
             using (var client = new HttpClient())
             {
-                var result = await client.PatchAsync($"{DB_PATH}{item.GetType().Name.ToLower()}/{item.Id}.json", content);
+                var result = await client.PatchAsync($"{AppSecretsHelper.Read("FirebaseRealtimePath")}{item.GetType().Name.ToLower()}/{item.Id}.json", content);
 
                 if (result.IsSuccessStatusCode)
                 {
@@ -76,7 +74,7 @@ namespace EvernoteClone.ViewModel.Helpers
         {
             using (var client = new HttpClient())
             {
-                var result = await client.DeleteAsync($"{DB_PATH}{item.GetType().Name.ToLower()}/{item.Id}.json");
+                var result = await client.DeleteAsync($"{AppSecretsHelper.Read("FirebaseRealtimePath")}{item.GetType().Name.ToLower()}/{item.Id}.json");
 
                 if (result.IsSuccessStatusCode)
                 {

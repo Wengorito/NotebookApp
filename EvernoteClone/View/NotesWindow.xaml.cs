@@ -1,4 +1,5 @@
-﻿using EvernoteClone.ViewModel;
+﻿using Azure.Storage.Blobs;
+using EvernoteClone.ViewModel;
 using EvernoteClone.ViewModel.Helpers;
 using Microsoft.CognitiveServices.Speech;
 using Microsoft.CognitiveServices.Speech.Audio;
@@ -6,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -49,7 +51,7 @@ namespace EvernoteClone.View
             }
         }
 
-        private void ViewModel_SelectedNoteChanged(object sender, EventArgs e)
+        private async void ViewModel_SelectedNoteChanged(object sender, EventArgs e)
         {
             contentRichTextBox.Document.Blocks.Clear();
 
@@ -57,7 +59,10 @@ namespace EvernoteClone.View
             {
                 if (!string.IsNullOrEmpty(_viewModel.SelectedNote.FileLocation))
                 {
-                    using (var fileStream = new FileStream(_viewModel.SelectedNote.FileLocation, FileMode.Open))
+                    var downloadPath = $"{_viewModel.SelectedNote.Id}.rtf";
+                    await new BlobClient(new Uri(_viewModel.SelectedNote.FileLocation)).DownloadToAsync(downloadPath);
+
+                    using (var fileStream = new FileStream(downloadPath, FileMode.Open))
                     {
                         var contents = new TextRange(contentRichTextBox.Document.ContentStart, contentRichTextBox.Document.ContentEnd);
                         contents.Load(fileStream, DataFormats.Rtf);
@@ -159,16 +164,33 @@ namespace EvernoteClone.View
 
         private async void saveButton_Click(object sender, RoutedEventArgs e)
         {
-            string rtfFile = Path.Combine(Environment.CurrentDirectory, $"{_viewModel.SelectedNote.Id}.rtf");
-            _viewModel.SelectedNote.FileLocation = rtfFile;
+            var fileName = $"{_viewModel.SelectedNote.Id}.rtf";
+            var rtfFile = Path.Combine(Environment.CurrentDirectory, fileName);
+
+            //_viewModel.SelectedNote.FileLocation = rtfFile;
             //DatabaseHelper.Update(_viewModel.SelectedNote);
-            await FirebaseDatabaseHelper.Update(_viewModel.SelectedNote);
 
             using (var fileStream = new FileStream(rtfFile, FileMode.Create))
             {
                 var contents = new TextRange(contentRichTextBox.Document.ContentStart, contentRichTextBox.Document.ContentEnd);
                 contents.Save(fileStream, DataFormats.Rtf);
             }
+
+            _viewModel.SelectedNote.FileLocation = await UpdateFile(rtfFile, fileName);
+            await FirebaseDatabaseHelper.Update(_viewModel.SelectedNote);
+        }
+
+        private async Task<string> UpdateFile(string rtfFilePath, string fileName)
+        {
+            var connectionString = AppSecretsHelper.Read("StorageConnectionString");
+            var containerName = "notes";
+
+            var container = new BlobContainerClient(connectionString, containerName);
+
+            var blob = container.GetBlobClient(fileName);
+            await blob.UploadAsync(rtfFilePath);
+
+            return $"https://evernotecloneapp.blob.core.windows.net/notes/{fileName}";
         }
     }
 }

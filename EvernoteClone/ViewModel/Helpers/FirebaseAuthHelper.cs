@@ -1,6 +1,5 @@
 ﻿using EvernoteClone.Model;
 using Newtonsoft.Json;
-using System.Configuration;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,24 +30,11 @@ namespace EvernoteClone.ViewModel.Helpers
 
     public class FirebaseAuthHelper
     {
-        private static string ReadSetting(string key)
-        {
-            try
-            {
-                return ConfigurationManager.AppSettings.Get(key) ?? "Not Found";
-            }
-            catch (ConfigurationErrorsException)
-            {
-                MessageBox.Show("Error reading app settings");
-                throw;
-            }
-        }
-
         public static async Task<bool> Register(User user)
         {
             using (HttpClient client = new HttpClient())
             {
-                var uri = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=" + ReadSetting("FirebaseApiKey");
+                var uri = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=" + AppSecretsHelper.Read("FirebaseApiKey");
 
                 var body = new
                 {
@@ -84,7 +70,7 @@ namespace EvernoteClone.ViewModel.Helpers
         {
             using (HttpClient client = new HttpClient())
             {
-                var uri = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + ReadSetting("FirebaseApiKey");
+                var uri = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + AppSecretsHelper.Read("FirebaseApiKey");
 
                 var body = new
                 {
