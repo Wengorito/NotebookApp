@@ -10,15 +10,57 @@
         Title="User Authentication" Height="300" Width="300">
     <Window.Resources>
         <vm:LoginVM x:Key="vm"/>
+        <Storyboard x:Key="MoveUp">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="LoginButton" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="40"/>
+                <!--<EasingDoubleKeyFrame KeyTime="00:00:00.4000000" Value="10"/>-->
+                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="0">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <ElasticEase EasingMode="EaseOut" Springiness="3.5" Oscillations="3"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="LoginButton" Storyboard.TargetProperty="(UIElement.Opacity)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:00.8000000" Value="1">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <BackEase EasingMode="EaseOut" Amplitude="3"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="1">
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="LoginButton" Storyboard.TargetProperty="(FrameworkElement.Width)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="190">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <CircleEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+                <EasingDoubleKeyFrame KeyTime="00:00:00.6" Value="265"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="LoginButton" Storyboard.TargetProperty="(FrameworkElement.Height)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="12"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:00.8000000" Value="20"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
     </Window.Resources>
-    <Grid DataContext="{StaticResource vm}">
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+            <BeginStoryboard Storyboard="{StaticResource MoveUp}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="MouseLeftButtonDown" SourceName="LoginTextblock">
+            <BeginStoryboard Storyboard="{StaticResource MoveUp}"/>
+        </EventTrigger>
+    </Window.Triggers>
+    <Grid DataContext="{StaticResource vm}" >
         <StackPanel Visibility="{Binding LoginVisibility}"
                     Margin="10,0">
-            <TextBlock Text="Register"
+            <TextBlock Name="RegisterTextblock"
+                       Text="I don't have an account"
                        Foreground="DodgerBlue"
                        TextDecorations="Underline"
-                       Width="45"
-                       Margin="0,0,0,10"
+                       Width="125"
+                       Margin="0,5,0,10"
                        HorizontalAlignment="Left">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseLeftButtonDown">
@@ -30,18 +72,28 @@
             <TextBox Text="{Binding Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Text="Password:"/>
             <TextBox Text="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <Button Content="Login"
+            <Button x:Name="LoginButton" Content="Login"
                     Command="{Binding LoginCommand}"
                     CommandParameter="{Binding User}"
-                    Margin="0,15"/>
+                    Margin="0,15" RenderTransformOrigin="0.5,1.2">
+                <Button.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Button.RenderTransform>
+            </Button>
         </StackPanel>
         <StackPanel Visibility="{Binding RegisterVisibility}"
                     Margin="10,0">
-            <TextBlock Text="Login"
+            <TextBlock Name="LoginTextblock"
+                       Text="I already have an account"
                        Foreground="DodgerBlue"
                        TextDecorations="Underline"
-                       Width="40"
-                       Margin="0,0,0,10"
+                       Width="135"
+                       Margin="0,5,0,10"
                        HorizontalAlignment="Left">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseLeftButtonDown">
@@ -63,7 +115,6 @@
                     Command="{Binding RegisterCommand}"
                     CommandParameter="{Binding User}"
                     Margin="0,15"/>
-
         </StackPanel>
     </Grid>
 </Window>
