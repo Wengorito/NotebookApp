@@ -11,9 +11,12 @@ Personal notebook application - provides simplified functionality that of OneNot
 
 Application uses Google Firebase Authentication and Realtime for user registration/login and database. Notes are kept in Azure Storage cloud.
 
-### Application screenshots
+## Application screenshots
 Main window view  
 ![alt text](Screenshots/MainWindowResized.png?raw=true)
 
 User registration/login view  
 ![alt text](Screenshots/UserAuthenticationResized.png?raw=true)
+
+## Running the application
+In order to use the application paste AppSettings.config file to the \EvernoteClone directory. The file contains all the user secrect, hence has not been uploaded to remote repository.
