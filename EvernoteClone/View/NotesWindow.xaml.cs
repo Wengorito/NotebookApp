@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -176,21 +175,8 @@ namespace EvernoteClone.View
                 contents.Save(fileStream, DataFormats.Rtf);
             }
 
-            _viewModel.SelectedNote.FileLocation = await UpdateFile(rtfFile, fileName);
+            _viewModel.SelectedNote.FileLocation = await AzureStorageHelper.UpdateFile(rtfFile, fileName);
             await FirebaseDatabaseHelper.Update(_viewModel.SelectedNote);
-        }
-
-        private async Task<string> UpdateFile(string rtfFilePath, string fileName)
-        {
-            var connectionString = AppSecretsHelper.Read("StorageConnectionString");
-            var containerName = "notes";
-
-            var container = new BlobContainerClient(connectionString, containerName);
-
-            var blob = container.GetBlobClient(fileName);
-            await blob.UploadAsync(rtfFilePath);
-
-            return $"https://evernotecloneapp.blob.core.windows.net/notes/{fileName}";
         }
     }
 }

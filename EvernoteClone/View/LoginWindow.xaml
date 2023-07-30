@@ -7,13 +7,13 @@
         xmlns:local="clr-namespace:EvernoteClone.View"
         xmlns:vm="clr-namespace:EvernoteClone.ViewModel"
         mc:Ignorable="d"
-        Title="User Authentication" Height="300" Width="300">
+        Title="Login"
+        Height="300" Width="300">
     <Window.Resources>
         <vm:LoginVM x:Key="vm"/>
         <Storyboard x:Key="MoveUp">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="LoginButton" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)">
                 <EasingDoubleKeyFrame KeyTime="00:00:00" Value="40"/>
-                <!--<EasingDoubleKeyFrame KeyTime="00:00:00.4000000" Value="10"/>-->
                 <EasingDoubleKeyFrame KeyTime="00:00:01" Value="0">
                     <EasingDoubleKeyFrame.EasingFunction>
                         <ElasticEase EasingMode="EaseOut" Springiness="3.5" Oscillations="3"/>
