@@ -17,19 +17,16 @@ namespace EvernoteClone.ViewModel.Helpers
             return $"https://evernotecloneapp.blob.core.windows.net/notes/{fileName}";
         }
 
-        public static async Task<bool> DeleteFile(string fileName)
+        public static async Task<bool> DeleteIfExistsFile(string fileName)
         {
             var connectionString = AppSecretsHelper.Read("StorageConnectionString");
             var containerName = "notes";
             var container = new BlobContainerClient(connectionString, containerName);
 
             var blob = container.GetBlobClient(fileName);
-            var response = await blob.DeleteAsync();
+            var response = await blob.DeleteIfExistsAsync();
 
-            if (response.Status == 200)
-                return true;
-            else
-                return false;
+            return response.Value;
         }
     }
 }

@@ -175,7 +175,9 @@ namespace EvernoteClone.View
                 contents.Save(fileStream, DataFormats.Rtf);
             }
 
+            await AzureStorageHelper.DeleteIfExistsFile(fileName);
             _viewModel.SelectedNote.FileLocation = await AzureStorageHelper.UpdateFile(rtfFile, fileName);
+
             await FirebaseDatabaseHelper.Update(_viewModel.SelectedNote);
         }
     }

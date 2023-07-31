@@ -187,7 +187,7 @@ namespace EvernoteClone.ViewModel
 
         public async void DeleteNote(Note note)
         {
-            await AzureStorageHelper.DeleteFile($"{SelectedNote.Id}.rtf");
+            await AzureStorageHelper.DeleteIfExistsFile($"{SelectedNote.Id}.rtf");
 
             await FirebaseDatabaseHelper.Delete(note);
 
