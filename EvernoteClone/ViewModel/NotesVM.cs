@@ -190,6 +190,7 @@ namespace EvernoteClone.ViewModel
             await AzureStorageHelper.DeleteFile($"{SelectedNote.Id}.rtf");
 
             await FirebaseDatabaseHelper.Delete(note);
+
             GetNotes();
         }
     }
